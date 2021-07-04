@@ -7,47 +7,46 @@ import java.util.stream.Collectors;
 
 public class Codec {
 
-    private String doSerialize(TreeNode root, String code) {
+    private int cur;
+    private StringBuilder code;
+
+    private void doSerialize(TreeNode root) {
         if (root == null) {
-            code += "null,";
-            return code;
+            code.append("null,");
+            return;
         }
-        code += root.val + ",";
-        code = doSerialize(root.left, code);
-        code = doSerialize(root.right, code);
-        return code;
+        code.append(root.val).append(",");
+        doSerialize(root.left);
+        doSerialize(root.right);
     }
 
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
-        return doSerialize(root, "");
+        code = new StringBuilder();
+        doSerialize(root);
+        return code.toString();
     }
 
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
+        cur = 0;
         String[] strings = data.split(",");
         List<String> stringList = new ArrayList<>(Arrays.asList(strings));
         return doDeserialize(stringList);
     }
 
     private TreeNode doDeserialize(List<String> data) {
-        if (data.isEmpty()) {
+        if (cur >= data.size()) {
             return null;
         }
-        if (data.get(0).equals("null")) {
-            data.remove(0);
+        if (data.get(cur).equals("null")) {
+            cur++;
             return null;
         }
-        TreeNode root = new TreeNode(Integer.parseInt(data.get(0)));
-        data.remove(0);
+        TreeNode root = new TreeNode(Integer.parseInt(data.get(cur)));
+        cur++;
         root.left = doDeserialize(data);
         root.right = doDeserialize(data);
         return root;
-    }
-
-    public static void main(String[] args) {
-        String data = "1,2,3,null,null,4,5";
-        Codec codec = new Codec();
-        codec.deserialize(data);
     }
 }
