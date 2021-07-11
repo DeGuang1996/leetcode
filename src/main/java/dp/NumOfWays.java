@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 
 public class NumOfWays {
 
-    private static final int MOD = (int) 1e9 + 7;
-
     public int numOfWays(int n) {
         ArrayList<Integer> types = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -49,6 +47,56 @@ public class NumOfWays {
             res = (res + dp[n][i]) % MOD;
         }
         return res;
+    }
+
+    private static final int MOD = (int) 1e9 + 7;
+    private ArrayList<ArrayList<Integer>> types = new ArrayList<>();
+
+    private void genValid(int m, ArrayList<Integer> path) {
+        if (path.size() == m) {
+            types.add(new ArrayList<>(path));
+            return;
+        }
+        for (int j = 0; j < 3; j++) {
+            if (path.isEmpty() || path.get(path.size() - 1) != j) {
+                path.add(j);
+                genValid(m, path);
+                path.remove(path.size() - 1);
+            }
+        }
+    }
+
+    private boolean isValid(int i, int j, int m) {
+        for (int k = 0; k < m; k++) {
+            if (types.get(i).get(k).equals(types.get(j).get(k))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int colorTheGrid(int m, int n) {
+        genValid(m, new ArrayList<>());
+        int[][] dp = new int[n + 1][types.size()];
+        for (int i = 0; i < types.size(); i++) {
+            dp[1][i] = 1;
+        }
+        for (int i = 2; i <= n; i++) {
+            for (int j = 0; j < types.size(); j++) {
+                for (int k = 0; k < types.size(); k++) {
+                    if (isValid(j, k, m)) {
+                        dp[i][j] += dp[i - 1][k];
+                        dp[i][j] %= MOD;
+                    }
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < types.size(); i++) {
+            ans += dp[n][i];
+            ans %= MOD;
+        }
+        return ans;
     }
 
     public static void main(String[] args) {

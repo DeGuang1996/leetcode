@@ -15,15 +15,14 @@ public class StackSort {
     }
 
     public static void makeStack(ArrayList<Integer> nums, int begin, int end) {
-        int left = begin, right = left << 1;
-        while (right <= end) {
-            if (right < end && nums.get(right) < nums.get(right + 1)) {
-                right++;
+        while (begin <= end) {
+            int next = begin * 2;
+            if (next + 1 < nums.size() && nums.get(next) < nums.get(next + 1)) {
+                next++;
             }
-            if (nums.get(left) < nums.get(right)) {
-                Collections.swap(nums, left, right);
-                left = right;
-                right = left << 1;
+            if (next <= end && nums.get(begin) < nums.get(next)) {
+                Collections.swap(nums, begin, next);
+                begin = next;
             } else {
                 break;
             }
@@ -31,7 +30,7 @@ public class StackSort {
     }
 
     public static void buildStack(ArrayList<Integer> nums) {
-        for (int i = (nums.size() >> 1); i >= 1; i--) {
+        for (int i = nums.size() / 2; i >= 1; i--) {
             makeStack(nums, i, nums.size() - 1);
         }
     }

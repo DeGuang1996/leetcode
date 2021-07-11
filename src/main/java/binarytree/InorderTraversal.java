@@ -8,7 +8,7 @@ import java.util.Stack;
 public class InorderTraversal {
 
     public List<Integer> inorderTraversal(TreeNode root) {
-        List<Integer> res = new ArrayList<>();
+        List<Integer> ans = new ArrayList<>();
         Stack<TreeNode> stack = new Stack<>();
 
         while (!stack.isEmpty() || root != null) {
@@ -17,11 +17,10 @@ public class InorderTraversal {
                 root = root.left;
             }
             root = stack.pop();
-            res.add(root.val);
+            ans.add(root.val);
             root = root.right;
         }
-
-        return res;
+        return ans;
     }
 
     public List<Integer> preorderTraversal(TreeNode root) {
