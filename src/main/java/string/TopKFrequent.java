@@ -66,4 +66,38 @@ public class TopKFrequent {
         return res;
     }
 
+    public String maximumTime(String time) {
+        StringBuilder stringBuilder = new StringBuilder(time);
+        if (stringBuilder.charAt(0) == '?' && stringBuilder.charAt(1) == '?') {
+            stringBuilder.setCharAt(0, '2');
+            stringBuilder.setCharAt(1, '3');
+        } else if (stringBuilder.charAt(0) == '?' && stringBuilder.charAt(1) < '4' && stringBuilder.charAt(1) >= '0') {
+            stringBuilder.setCharAt(0, '2');
+        } else if (stringBuilder.charAt(0) == '?' && stringBuilder.charAt(1) >= '4' && stringBuilder.charAt(1) <= '9') {
+            stringBuilder.setCharAt(0, '1');
+        }
+        if (stringBuilder.charAt(1) == '?') {
+            if (stringBuilder.charAt(0) == '2') {
+                stringBuilder.setCharAt(1, '3');
+            } else {
+                stringBuilder.setCharAt(1, '9');
+            }
+        }
+        if (stringBuilder.charAt(3) == '?') {
+            stringBuilder.setCharAt(3, '5');
+        }
+        if (stringBuilder.charAt(4) == '?') {
+            stringBuilder.setCharAt(4, '9');
+        }
+        return stringBuilder.toString();
+    }
+
+    public int titleToNumber(String columnTitle) {
+        int ans = 0;
+        for (int i = 0; i < columnTitle.length(); i++) {
+            ans = ans * 26 + columnTitle.charAt(i) - 'A' + 1;
+        }
+        return ans;
+    }
+
 }
