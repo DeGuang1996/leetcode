@@ -9,38 +9,43 @@ public class NetworkDelayTime {
 
     public int networkDelayTime(int[][] times, int n, int k) {
         HashMap<Integer, ArrayList<int[]>> edges = new HashMap<>();
-        for (int[] edge : times) {
-            edges.putIfAbsent(edge[0], new ArrayList<>());
-            edges.get(edge[0]).add(new int[]{edge[1], edge[2]});
+        for (int i = 0; i < times.length; i++) {
+            int from = times[i][0];
+            int to = times[i][1];
+            int cost = times[i][2];
+
+            edges.putIfAbsent(from, new ArrayList<>());
+            edges.get(from).add(new int[]{to, cost});
         }
-        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(term -> term[1]));
+        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>((term1, term2) -> term1[1] - term2[1]);
         priorityQueue.offer(new int[]{k, 0});
-        HashMap<Integer, Integer> distance = new HashMap<>();
+        HashMap<Integer, Integer> visited = new HashMap<>();
         int ans = 0;
 
         while (!priorityQueue.isEmpty()) {
-            if (distance.size() >= n) {
+            if (visited.size() >= n) {
                 break;
             }
-            int[] edge = priorityQueue.poll();
-            int from = edge[0];
-            int cost = edge[1];
+            int[] cur = priorityQueue.poll();
+            int from = cur[0];
+            int cost = cur[1];
 
-            if (distance.containsKey(from)) {
+            if (visited.containsKey(from)) {
                 continue;
             }
             if (edges.containsKey(from)) {
                 ArrayList<int[]> to = edges.get(from);
                 for (int[] next : to) {
-                    if (!distance.containsKey(next[0])) {
-                        priorityQueue.offer(new int[]{next[0], cost + next[1]});
+                    if (!visited.containsKey(next[0])) {
+                        priorityQueue.offer(new int[]{next[0], next[1] + cost});
                     }
                 }
             }
-            distance.put(from, cost);
+            visited.put(from, cost);
             ans = Math.max(ans, cost);
         }
-        if (distance.size() < n) {
+
+        if (visited.size() < n) {
             return -1;
         }
         return ans;
