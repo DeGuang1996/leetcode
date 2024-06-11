@@ -7,10 +7,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AlternativePrint {
 
     private volatile int num;
-    private Lock lock;
-    private Condition conditionA;
-    private Condition conditionB;
-    private Condition conditionC;
+    private final Lock lock;
+    private final Condition conditionA;
+    private final Condition conditionB;
+    private final Condition conditionC;
 
     public AlternativePrint() {
         num = 1;
